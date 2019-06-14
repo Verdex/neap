@@ -1,6 +1,6 @@
 
 all: main.o
-	clang -o neap main.o
+	clang -o sliver main.o
 
 main.o: 
 	clang -c main.c
@@ -8,5 +8,5 @@ main.o:
 
 clean:
 	rm -rf *.o
-	rm -rf neap
+	rm -rf sliver 
 
