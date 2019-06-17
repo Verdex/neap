@@ -2,6 +2,14 @@
 #ifndef __data_h__
 #define __data_h__
 
+#include<stdint.h>
+#include<stdlib.h>
+
+struct Tokens {
+    size_t length;
+    struct Token* tokens;
+};
+
 struct SString {
     size_t length;
     char* chars;
