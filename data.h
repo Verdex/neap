@@ -7,11 +7,13 @@
 
 struct Tokens {
     size_t length;
+    size_t allocated_length;
     struct Token* tokens;
 };
 
 struct SString {
     size_t length;
+    size_t allocated_length;
     char* chars;
 };
 
@@ -35,7 +37,7 @@ enum TT { TMod
 struct Token {
     enum TT type;
     union {
-        SString string;
+        struct SString string;
     };
 };
 
