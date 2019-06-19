@@ -109,6 +109,7 @@ let lex_string input =
         raise (LexError (input#index, input#current, "string lexer"))
     ; String (Buffer.contents ret, start)
 
+
 let lex (input : <current : char
                  ;index : int
                  ;move_next : bool
