@@ -7,6 +7,10 @@ enum Token {
     Sig,
     Ext,
     Fun,
+    Try,
+    Match,
+    Async,
+    Await,
     Dot,
     Colon,
     Semi,
@@ -22,6 +26,3 @@ enum Token {
     Percent,
 }
 
-pub fn ikky() {
-    println!("ikky");
-}

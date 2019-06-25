@@ -17,6 +17,6 @@ fn main() -> std::io::Result<()> {
     println!("Hello, world!");
     println!("{:#?}", args);
     println!("{}", input_string);
-    lexer::function();
+    lexer::lex(&input_string);
     Ok(())
 }
