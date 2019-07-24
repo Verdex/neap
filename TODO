@@ -9,16 +9,12 @@ object
 try 
 match
 ADT
-:: mod
+polymorphic variants
 . ext
-bit syntax
 slice (?)
 array
-macros?
+macros
 const func
-linq
-plinq
-ps
-unify
-do notation
+(p)linq
+async await
 test
