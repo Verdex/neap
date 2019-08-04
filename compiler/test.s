@@ -1,29 +1,83 @@
 
-mod x.y.z {
-    use a.b.c;
+mod x::y::z {
+    use a::b::c;
 
-    type a = type_info;
-    type b = c;
-    type d<a> = Con(a, d<a>) | Nil;
-    type j = { a : b, c : d };
-    type k = Con { a : b, c : d } | Nil;
-
-    sig w {
-
-        type a;
-        let z : type_info = expr; 
-        fun x ( a : ta, b : tb, ... ) -> xt;
-        ext y ( a : ta, b : tb, ... ) -> yt;
-    }
-}
-
-mod blah<a> {
-    use blarg<b>;
-    use zap<c> as h;
-
-    fun x<b>( a : fun<b, c> ) -> b {
-        h.some_function(1, 2, 3);
-        return [1, 2, 3].map( < %1 + 1 > );
+    struct a<b,c> {
+        field1 : b;
+        field2 : c;
+        field3 : number;
     }
 
+    union h<k, j> {
+        option1 : k;
+        option2 : j; 
+        option3 : string;
+    }
+
+    struct z {
+        y : union {
+            a : number;
+            b : string;
+            c : struct { a : number; b : string };
+        };
+        x : number;
+    }
+
+    sig blah {
+        abstract a;
+        abstract b;
+        
+        fun x( self, one : a ) -> number;
+        fun y<t>( self, one : a ); 
+
+    }
+
+    sig other<x, y> {
+
+    }
+
+    impl<x, y> other<x, y> for h<x, y> {
+
+    }
+
+    union blarg {
+        a : b;
+        c : d;
+    }
+    /* comment */
+    // comment
+    fun x<a, b>( input1 : a, input2 : b, input3 : string ) -> number {
+        let h : number = 50.2;
+        let z = "blah";
+
+        fun w( a : number ) {
+
+        }
+        
+        let y = <%1.add(%2)>;
+
+        let l = [1,2,3];
+
+        let x = { a : b, c : c };
+
+        let www = blarg { a : 6 };
+
+        case www {
+            a => www.a;
+            c => { www.c };
+        }
+
+        for x in y {
+
+        }
+
+        while true {
+
+        }
+        return 0;
+    }
+
+    test name {
+
+    }
 }
