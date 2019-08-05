@@ -1,5 +1,5 @@
 
-enum Token {
+pub enum Token {
     Mod,
     Use,
     Sig,
