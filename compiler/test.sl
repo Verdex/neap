@@ -79,6 +79,8 @@ mod x::y::z {
 
             if x {
 
+                let z = try blah();
+
             }
             elseif y {
 
