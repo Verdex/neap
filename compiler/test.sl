@@ -50,7 +50,11 @@ mod x::y::z {
         let h : number = 50.2;
         let z = "blah";
 
+        set z = "other blah";
         fun w( a : number ) {
+
+        }
+        fun w2( a ) {
 
         }
         
@@ -73,6 +77,17 @@ mod x::y::z {
 
         while true {
 
+            if x {
+
+            }
+            elseif y {
+
+            }
+            else {
+
+                break;
+                continue;
+            }
         }
         return 0;
     }
