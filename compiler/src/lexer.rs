@@ -13,6 +13,10 @@ enum Mode {
 
 fn lex_normal( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mode {
     match c {
+        t if t.is_whitespace() => Mode::Normal,
+        t if t.is_digit(10) => { buffer.push( t ); Mode::Number },
+        t if t.is_alphabetic() => { buffer.push( t );  Mode::Symbol },
+        t if t == '"' => Mode::Str,
         ';' => { toks.push( Token::Semi ); Mode::Normal },
         ',' => { toks.push( Token::Comma ); Mode::Normal },
         ':' => { toks.push( Token::Colon ); Mode::Normal },
