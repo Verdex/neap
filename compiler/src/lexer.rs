@@ -49,7 +49,6 @@ fn lex_line_comment(c : char) -> Mode {
     match c {
         '\n' => Mode::Normal,
         '\r' => Mode::Normal,
-        // TODO EOF
         _ => Mode::LineComment,
     }
 }
@@ -59,6 +58,9 @@ fn lex_block_comment(c : char) -> Mode {
 }
 
 fn lex_str( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mode {
+    match c {
+        
+    }
     Mode::Normal
 }
 
