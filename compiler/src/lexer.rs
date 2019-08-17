@@ -84,7 +84,7 @@ fn lex_number( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mo
         t if t.is_digit(10) => { buffer.push(c); Mode::Number },
         '.' => { buffer.push(c); Mode::Number },
         _ => {  // TODO need to throw the character back on the input
-            toks.push(Token::Str(buffer.iter().collect())); 
+            toks.push(Token::Number(buffer.iter().collect())); 
             buffer.clear();
             Mode::Normal 
         },
