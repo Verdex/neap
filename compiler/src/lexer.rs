@@ -11,6 +11,7 @@ enum Mode {
     Str, 
     Number,
     Symbol,
+    Push(usize, char),
 }
 
 fn lex_normal( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mode {
@@ -84,10 +85,10 @@ fn lex_number( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mo
     match c {
         t if t.is_digit(10) => { buffer.push(c); Mode::Number },
         '.' => { buffer.push(c); Mode::Number },
-        _ => {  // TODO need to throw the character back on the input
+        _ => {  
             toks.push(Token::Number(buffer.iter().collect())); 
             buffer.clear();
-            Mode::Normal 
+            Mode::Push( 0, c )
         },
     }
 }
@@ -115,6 +116,7 @@ pub fn lex(input : &str) -> Vec<Token> {
                    Mode::Str => mode = lex_str(c, &mut toks, &mut buffer), 
                    Mode::Number => mode = lex_number(c, &mut toks, &mut buffer), 
                    Mode::Symbol => mode = lex_symbol(c, &mut toks, &mut buffer), 
+                   Mode::Push(pi, pc) => { mode = Mode::Normal; input.push(pi, pc); },
                 }
             },
             None => { break }
