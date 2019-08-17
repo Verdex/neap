@@ -98,8 +98,22 @@ fn lex_number( c : char,
     }
 }
 
-fn lex_symbol( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mode {
-    Mode::Normal
+fn lex_symbol( c : char,  
+               i : usize, 
+               input : &mut Input, 
+               toks : &mut Vec<Token>, 
+               buffer : &mut Vec<char> ) -> Mode {
+
+    match c {
+        t if t.is_digit(10) => { buffer.push(c); Mode::Number },
+        '.' => { buffer.push(c); Mode::Number },
+        _ => {  
+            toks.push(Token::Number(buffer.iter().collect())); 
+            buffer.clear();
+            input.push( i, c );
+            Mode::Normal
+        },
+    }
 }
 
 pub fn lex(input : &str) -> Vec<Token> {
@@ -120,7 +134,7 @@ pub fn lex(input : &str) -> Vec<Token> {
                    Mode::MaybeEndBlockComment => mode = lex_maybe_end_block_comment(c),
                    Mode::Str => mode = lex_str(c, &mut toks, &mut buffer), 
                    Mode::Number => mode = lex_number(c, i, &mut input, &mut toks, &mut buffer), 
-                   Mode::Symbol => mode = lex_symbol(c, &mut toks, &mut buffer), 
+                   Mode::Symbol => mode = lex_symbol(c, i, &mut input, &mut toks, &mut buffer), 
                 }
             },
             None => { break }
