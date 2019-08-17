@@ -39,7 +39,7 @@ pub enum Token {
     True,
     False,
     Unit,
-    Number(f64),
+    Number(String),
     Str(String),
     Symbol(String),
 }
