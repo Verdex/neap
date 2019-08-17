@@ -1,4 +1,6 @@
 
+#[derive(Debug)]
+#[derive(PartialEq)]
 pub enum Token {
     Mod,
     Use,
