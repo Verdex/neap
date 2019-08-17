@@ -98,6 +98,37 @@ fn lex_number( c : char,
     }
 }
 
+fn map_symbol( s : String ) -> Token {
+    match s.as_ref() {
+        "if" => Token::If,
+        "elseif" => Token::Elseif,
+        "else" => Token::Else,
+        "true" => Token::True,
+        "false" => Token::False,
+        "case" => Token::Case,
+        "break" => Token::Break,
+        "try" => Token::Try,
+        "fun" => Token::Fun,
+        "abstract" => Token::Abstract,
+        "union" => Token::Union,
+        "struct" => Token::Struct,
+        "continue" => Token::Continue,
+        "return" => Token::Return,
+        "test" => Token::Test,
+        "let" => Token::Let,
+        "set" => Token::Set,
+        "for" => Token::For,
+        "in" => Token::In,
+        "use" => Token::Use,
+        "mod" => Token::Mod,
+        "impl" => Token::Impl,
+        "sig" => Token::Sig,
+        "while" => Token::While,
+        "unit" => Token::Unit,
+        _ => Token::Symbol( s ),
+    }
+}
+
 fn lex_symbol( c : char,  
                i : usize, 
                input : &mut Input, 
@@ -105,10 +136,9 @@ fn lex_symbol( c : char,
                buffer : &mut Vec<char> ) -> Mode {
 
     match c {
-        t if t.is_digit(10) => { buffer.push(c); Mode::Number },
-        '.' => { buffer.push(c); Mode::Number },
+        t if t.is_digit(10) => { buffer.push(c); Mode::Symbol },
         _ => {  
-            toks.push(Token::Number(buffer.iter().collect())); 
+            toks.push(map_symbol(buffer.iter().collect())); 
             buffer.clear();
             input.push( i, c );
             Mode::Normal
@@ -117,7 +147,7 @@ fn lex_symbol( c : char,
 }
 
 pub fn lex(input : &str) -> Vec<Token> {
-    let mut ci = input.char_indices();
+    let ci = input.char_indices();
     let mut input = Input{ main: ci, pushed: vec! [] }; 
     let mut toks : Vec<Token> = vec! [];
     let mut buffer : Vec<char> = vec! [];

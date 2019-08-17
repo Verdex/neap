@@ -19,6 +19,7 @@ pub enum Token {
     Test,
     Let,
     Struct,
+    Union,
     Abstract,
     Fun,
     Try,
