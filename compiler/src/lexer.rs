@@ -1,5 +1,6 @@
 
 use super::data::Token;
+use super::input::Input;
 
 enum Mode {
     Normal,
@@ -97,12 +98,13 @@ fn lex_symbol( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mo
 
 pub fn lex(input : &str) -> Vec<Token> {
     let mut ci = input.char_indices();
+    let mut input = Input{ main: ci, pushed: vec! [] }; 
     let mut toks : Vec<Token> = vec! [];
     let mut buffer : Vec<char> = vec! [];
     let mut mode = Mode::Normal;
 
     loop {
-        match ci.next() {
+        match input.next() {
             Some((i, c)) => {
                 match mode {
                    Mode::Normal => mode = lex_normal(c, &mut toks, &mut buffer),

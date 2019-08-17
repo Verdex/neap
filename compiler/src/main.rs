@@ -1,6 +1,7 @@
 
 mod lexer;
 mod data;
+mod input;
 
 use std::env;
 use std::fs::File;
