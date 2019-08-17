@@ -6,6 +6,7 @@ enum Mode {
     ProtoComment,
     LineComment,
     BlockComment,
+    MaybeEndBlockComment,
     Str, 
     Number,
     Symbol,
@@ -54,18 +55,40 @@ fn lex_line_comment(c : char) -> Mode {
 }
 
 fn lex_block_comment(c : char) -> Mode {
-    Mode::Normal
+    match c {
+        '*' => Mode::MaybeEndBlockComment,
+        _ => Mode::BlockComment,
+    }
+}
+
+fn lex_maybe_end_block_comment(c : char) -> Mode {
+    match c {
+        '/' => Mode::Normal,
+        _ => Mode::BlockComment,
+    }
 }
 
 fn lex_str( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mode {
     match c {
-        
+        '"' => { 
+            toks.push(Token::Str(buffer.iter().collect())); 
+            buffer.clear();
+            Mode::Normal 
+        },
+        _ => { buffer.push(c); Mode::Str },
     }
-    Mode::Normal
 }
 
 fn lex_number( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mode {
-    Mode::Normal
+    match c {
+        t if t.is_digit(10) => { buffer.push(c); Mode::Number },
+        '.' => { buffer.push(c); Mode::Number },
+        _ => {  // TODO need to throw the character back on the input
+            toks.push(Token::Str(buffer.iter().collect())); 
+            buffer.clear();
+            Mode::Normal 
+        },
+    }
 }
 
 fn lex_symbol( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mode {
@@ -86,6 +109,7 @@ pub fn lex(input : &str) -> Vec<Token> {
                    Mode::ProtoComment => mode = lex_proto_comment(c),
                    Mode::LineComment => mode = lex_line_comment(c), 
                    Mode::BlockComment => mode = lex_block_comment(c), 
+                   Mode::MaybeEndBlockComment => mode = lex_maybe_end_block_comment(c),
                    Mode::Str => mode = lex_str(c, &mut toks, &mut buffer), 
                    Mode::Number => mode = lex_number(c, &mut toks, &mut buffer), 
                    Mode::Symbol => mode = lex_symbol(c, &mut toks, &mut buffer), 
