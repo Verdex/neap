@@ -320,10 +320,31 @@ mod tests {
             assert_eq!( r, o[0] );
         }
     }
-    // example code
-    // comment
-    // block comment
-    // nested block comment
 
+    #[test]
+    fn should_handle_line_comment() {
+        let comments = r#"
+// @##$^^!^&*$*        
+symbol
+// "#; 
+
+        let o = lex( comments );
+        assert_eq!( 1, o.len() );
+        assert_eq!( Token::Symbol("symbol".to_owned()), o[0] );
+    }
+
+    #[test]
+    fn should_handle_block_comment() {
+        let comments = r#"
+/* @##$^^!^&*$*       
+ blarg
+*/
+symbol
+/* *** */ "#; 
+
+        let o = lex( comments );
+        assert_eq!( 1, o.len() );
+        assert_eq!( Token::Symbol("symbol".to_owned()), o[0] );
+    }
 }
 
