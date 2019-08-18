@@ -270,6 +270,8 @@ mod tests {
                            , ("s_123", Token::Symbol("s_123".to_owned()))
                            , ("_123", Token::Symbol("_123".to_owned()))
                            , ("_123_", Token::Symbol("_123_".to_owned()))
+                           , ("_", Token::Symbol("_".to_owned()))
+                           , ("i", Token::Symbol("i".to_owned()))
                            ];
 
         for (s, r) in symbols {
@@ -278,8 +280,19 @@ mod tests {
             assert_eq!( r, o[0] );
         }
     }
-    // symbols that start or end with keywords
-    // symbol
+
+    #[test]
+    fn should_handle_symbol_like_keyword() {
+        let symbols = vec! [ ("if_", Token::Symbol("if_".to_owned())) 
+                           , ("_if", Token::Symbol("_if".to_owned()))
+                           ];
+
+        for (s, r) in symbols {
+            let o = lex( s );
+            assert_eq!( 1, o.len() );
+            assert_eq!( r, o[0] );
+        }
+    }
     // numbers (at end of file)
     // strings (at end of file)
     // example code
