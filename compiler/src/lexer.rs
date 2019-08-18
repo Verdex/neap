@@ -20,6 +20,7 @@ fn lex_normal( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mo
         t if t.is_whitespace() => Mode::Normal,
         t if t.is_digit(10) => { buffer.push( t ); Mode::Number },
         t if t.is_alphabetic() => { buffer.push( t );  Mode::Symbol },
+        t if t == '_' => { buffer.push( t );  Mode::Symbol },
         t if t == '"' => Mode::Str,
         ';' => { toks.push( Token::Semi ); Mode::Normal },
         ',' => { toks.push( Token::Comma ); Mode::Normal },
@@ -37,7 +38,7 @@ fn lex_normal( c : char, toks : &mut Vec<Token>, buffer : &mut Vec<char> ) -> Mo
         '.' => { toks.push( Token::Dot ); Mode::Normal },
         '%' => { toks.push( Token::Percent ); Mode::Normal },
         '/' => Mode::ProtoComment,
-        _ => panic!( "blarg" ),
+        _ => panic!( "blarg" ), // TODO better error message
     }
 }
 
@@ -235,11 +236,52 @@ mod tests {
             assert_eq!( r, o[0] );
         }
     }
+
+    #[test]
+    fn should_handle_punctuation() {
+        let punc = vec! [ (",", Token::Comma) 
+                        , (":", Token::Colon)
+                        , (";", Token::Semi)
+                        , ("<", Token::LAngle)
+                        , (">", Token::RAngle)
+                        , ("[", Token::LSquare)
+                        , ("]", Token::RSquare)
+                        , ("{", Token::LCurl)
+                        , ("}", Token::RCurl)
+                        , ("(", Token::LParen)
+                        , (")", Token::RParen)
+                        , ("-", Token::Sub)
+                        , (".", Token::Dot)
+                        , ("=", Token::Equal)
+                        , ("%", Token::Percent)
+                        ];
+
+        for (s, r) in punc {
+            let o = lex( s );
+            assert_eq!( 1, o.len() );
+            assert_eq!( r, o[0] );
+        }
+    }
+
+    #[test]
+    fn should_handle_symbol() {
+        let symbols = vec! [ ("symbol", Token::Symbol("symbol".to_owned())) 
+                           , ("symbol123", Token::Symbol("symbol123".to_owned()))
+                           , ("s_123", Token::Symbol("s_123".to_owned()))
+                           , ("_123", Token::Symbol("_123".to_owned()))
+                           , ("_123_", Token::Symbol("_123_".to_owned()))
+                           ];
+
+        for (s, r) in symbols {
+            let o = lex( s );
+            assert_eq!( 1, o.len() );
+            assert_eq!( r, o[0] );
+        }
+    }
     // symbols that start or end with keywords
     // symbol
     // numbers (at end of file)
     // strings (at end of file)
-    // punctuation
     // example code
     // comment
     // block comment
