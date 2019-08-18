@@ -293,8 +293,33 @@ mod tests {
             assert_eq!( r, o[0] );
         }
     }
-    // numbers (at end of file)
-    // strings (at end of file)
+
+    #[test]
+    fn should_handle_numbers() {
+        let numbers = vec! [ ("1.0", Token::Number("1.0".to_owned())) 
+                           , ("1.1", Token::Number("1.1".to_owned()))
+                           , ("1", Token::Number("1".to_owned()))
+                           , ("1234567890", Token::Number("1234567890".to_owned()))
+                           ];
+
+        for (s, r) in numbers {
+            let o = lex( s );
+            assert_eq!( 1, o.len() );
+            assert_eq!( r, o[0] );
+        }
+    }
+
+    #[test]
+    fn should_handle_strings() {
+        let strings = vec! [ ("\"blah 425346#$%@#$%@.\"", Token::Str("blah 425346#$%@#$%@.".to_owned())) 
+                           ];
+
+        for (s, r) in strings {
+            let o = lex( s );
+            assert_eq!( 1, o.len() );
+            assert_eq!( r, o[0] );
+        }
+    }
     // example code
     // comment
     // block comment
