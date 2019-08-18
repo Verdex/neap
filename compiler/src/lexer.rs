@@ -160,8 +160,6 @@ pub fn lex(input : &str) -> Vec<Token> {
     loop {
         match input.next() {
             Some((i, c)) => {
-                println!( "{}", c );
-                println!( "{:?}", mode);
                 match mode {
                    Mode::Normal => mode = lex_normal(c, &mut toks, &mut buffer),
                    Mode::ProtoComment => mode = lex_proto_comment(c),
@@ -204,7 +202,32 @@ mod tests {
         // r#" "#
     #[test]
     fn should_handle_keywords() {
-        let words = vec! [ ("if", Token::If) ];
+        let words = vec! [ ("if", Token::If) 
+                         , ("elseif", Token::Elseif)
+                         , ("else", Token::Else)
+                         , ("true", Token::True)
+                         , ("false", Token::False)
+                         , ("case", Token::Case)
+                         , ("break", Token::Break)
+                         , ("continue", Token::Continue)
+                         , ("try", Token::Try)
+                         , ("fun", Token::Fun)
+                         , ("abstract", Token::Abstract)
+                         , ("union", Token::Union)
+                         , ("struct", Token::Struct)
+                         , ("return", Token::Return)
+                         , ("test", Token::Test)
+                         , ("let", Token::Let)
+                         , ("set", Token::Set)
+                         , ("for", Token::For)
+                         , ("in", Token::In)
+                         , ("use", Token::Use)
+                         , ("mod", Token::Mod)
+                         , ("impl", Token::Impl)
+                         , ("sig", Token::Sig)
+                         , ("while", Token::While)
+                         , ("unit", Token::Unit)
+                         ];
 
         for (s, r) in words {
             let o = lex( s );
