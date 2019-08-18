@@ -2,6 +2,8 @@
 use super::data::Token;
 use super::input::Input;
 
+#[derive(Debug)]
+#[derive(PartialEq)]
 enum Mode {
     Normal,
     ProtoComment,
@@ -137,6 +139,8 @@ fn lex_symbol( c : char,
 
     match c {
         t if t.is_digit(10) => { buffer.push(c); Mode::Symbol },
+        t if t.is_alphabetic() => { buffer.push(c); Mode::Symbol },
+        t if t == '_' => { buffer.push(c); Mode::Symbol },
         _ => {  
             toks.push(map_symbol(buffer.iter().collect())); 
             buffer.clear();
@@ -156,6 +160,8 @@ pub fn lex(input : &str) -> Vec<Token> {
     loop {
         match input.next() {
             Some((i, c)) => {
+                println!( "{}", c );
+                println!( "{:?}", mode);
                 match mode {
                    Mode::Normal => mode = lex_normal(c, &mut toks, &mut buffer),
                    Mode::ProtoComment => mode = lex_proto_comment(c),
@@ -167,9 +173,54 @@ pub fn lex(input : &str) -> Vec<Token> {
                    Mode::Symbol => mode = lex_symbol(c, i, &mut input, &mut toks, &mut buffer), 
                 }
             },
-            None => { break }
+            None => {
+                if mode == Mode::BlockComment 
+                    || mode == Mode::ProtoComment
+                    || mode == Mode::MaybeEndBlockComment
+                    || mode == Mode::Str {
+                
+                    panic!( "encountered EOF while in {:?} mode", mode );
+                }
+
+                if buffer.len() > 0 {
+                    match mode {
+                       Mode::Number => { lex_number('\0', 0, &mut input, &mut toks, &mut buffer); },
+                       Mode::Symbol => { lex_symbol('\0', 0, &mut input, &mut toks, &mut buffer); },
+                       _ => panic!( "encountered EOF while in {:?} mode with non-zero buffer", mode ),
+                    }
+                }
+                break 
+            }
         }
     }
     toks
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+        // assert_eq!( blah, blah );
+        // r#" "#
+    #[test]
+    fn should_handle_keywords() {
+        let words = vec! [ ("if", Token::If) ];
+
+        for (s, r) in words {
+            let o = lex( s );
+            assert_eq!( 1, o.len() );
+            assert_eq!( r, o[0] );
+        }
+    }
+    // symbols that start or end with keywords
+    // symbol
+    // numbers (at end of file)
+    // strings (at end of file)
+    // punctuation
+    // example code
+    // comment
+    // block comment
+    // nested block comment
+
 }
 
