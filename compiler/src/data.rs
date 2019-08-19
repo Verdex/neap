@@ -47,3 +47,8 @@ pub enum Token {
     Symbol(String),
 }
 
+#[derive(Debug)]
+#[derive(PartialEq)]
+pub enum Ast {
+    Delete,
+}
