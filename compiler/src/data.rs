@@ -65,6 +65,13 @@ pub enum TypeInfo {
 
 #[derive(Debug)]
 #[derive(PartialEq)]
+pub struct Var {
+    name : String,
+    type_info : Option<TypeInfo>,
+}
+
+#[derive(Debug)]
+#[derive(PartialEq)]
 pub struct Struct {
     type_params : Vec<String>,
     fields : Vec<Var>,
@@ -80,14 +87,14 @@ pub struct Union {
 #[derive(Debug)]
 #[derive(PartialEq)]
 pub enum Expr {
-    Try(Expr),    
+    Try(Box<Expr>),    
     List(Vec<Expr>),
     Dot(Vec<Expr>),
     Var(String),
     Bool(bool),
     Str(String),
     Number(f64),
-    ShortLambda(Expr),
+    ShortLambda(Box<Expr>),
 }
 
 #[derive(Debug)]
@@ -97,4 +104,8 @@ pub enum Statement {
     Set { var : Expr, expr : Expr },  // dot or var
     Let { var : String, type_info : Option<TypeInfo>, expr : Expr },
     Use(Vec<String>),
+    Return(Option<Expr>),
+    Continue,
+    Break,
+    Fun { name : String, type_parameters : Vec<String>, parameters : Vec<Var>, return_type : Option<TypeInfo> },
 }
